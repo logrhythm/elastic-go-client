@@ -263,12 +263,11 @@ type clusterBlock struct {
 }
 
 type clusterStateMetadata struct {
-	ClusterUUID          string                            `json:"cluster_uuid"`
-	ClusterUUIDCommitted bool                              `json:"cluster_uuid_committed"`
-	ClusterCoordination  *clusterCoordinationMetaData      `json:"cluster_coordination"`
-	Templates            map[string]*indexTemplateMetaData `json:"templates"` // template name -> index template metadata
-	Indices              map[string]*indexMetaData         `json:"indices"`   // index name _> meta data
-	RoutingTable         struct {
+	ClusterUUID         string                            `json:"cluster_uuid"`
+	ClusterCoordination *clusterCoordinationMetaData      `json:"cluster_coordination"`
+	Templates           map[string]*indexTemplateMetaData `json:"templates"` // template name -> index template metadata
+	Indices             map[string]*indexMetaData         `json:"indices"`   // index name _> meta data
+	RoutingTable        struct {
 		Indices map[string]*indexRoutingTable `json:"indices"` // index name -> routing table
 	} `json:"routing_table"`
 	RoutingNodes struct {
