@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/olivere/elastic/v7/uritemplates"
+	"github.com/logrhythm/elastic-go-client/uritemplates"
 )
 
 // NodesInfoService allows to retrieve one or more or all of the

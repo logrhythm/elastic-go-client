@@ -13,7 +13,7 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/olivere/elastic/v7/uritemplates"
+	"github.com/logrhythm/elastic-go-client/uritemplates"
 )
 
 // XPackAsyncSearchSubmit is an XPack API for asynchronously

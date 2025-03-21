@@ -12,7 +12,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/olivere/elastic/v7/uritemplates"
+	"github.com/logrhythm/elastic-go-client/uritemplates"
 )
 
 // IndicesShrinkService allows you to shrink an existing index into a

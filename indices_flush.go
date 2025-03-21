@@ -11,7 +11,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/olivere/elastic/v7/uritemplates"
+	"github.com/logrhythm/elastic-go-client/uritemplates"
 )
 
 // Flush allows to flush one or more indices. The flush process of an index

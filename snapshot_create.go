@@ -12,7 +12,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/olivere/elastic/v7/uritemplates"
+	"github.com/logrhythm/elastic-go-client/uritemplates"
 )
 
 // SnapshotCreateService is documented at https://www.elastic.co/guide/en/elasticsearch/reference/7.0/modules-snapshots.html.
