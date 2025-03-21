@@ -4,13 +4,12 @@
 
 // Scroll illustrates scrolling through a set of documents.
 //
-// Example
+// # Example
 //
 // Scroll through an index called "products".
 // Use "_uid" as the default field:
 //
-//     scroll -index=products -size=100
-//
+//	scroll -index=products -size=100
 package main
 
 import (
@@ -24,7 +23,7 @@ import (
 
 	"golang.org/x/sync/errgroup"
 
-	"github.com/olivere/elastic/v7"
+	"github.com/logrhythm/elastic-go-client"
 )
 
 func main() {

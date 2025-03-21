@@ -6,8 +6,7 @@
 //
 // Example
 //
-//     aws-connect-v4 -url=https://search-xxxxx-yyyyy.eu-central-1.es.amazonaws.com
-//
+//	aws-connect-v4 -url=https://search-xxxxx-yyyyy.eu-central-1.es.amazonaws.com
 package main
 
 import (
@@ -18,8 +17,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/olivere/env"
 
-	"github.com/olivere/elastic/v7"
-	aws "github.com/olivere/elastic/v7/aws/v4"
+	"github.com/logrhythm/elastic-go-client"
+	aws "github.com/logrhythm/elastic-go-client/aws/v4"
 )
 
 func main() {
