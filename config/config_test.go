@@ -74,3 +74,58 @@ func TestParseTrimsIndexName(t *testing.T) {
 		t.Fatalf("expected Index = %q, got %q", want, got)
 	}
 }
+
+func TestParseTLSConfig(t *testing.T) {
+	urls := "https://admin:secret@localhost:9200/logs?cacert=/etc/certs/ca.pem&clientcert=/etc/certs/client.pem&clientkey=/etc/certs/client-key.pem"
+	cfg, err := Parse(urls)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if want, got := "https://localhost:9200", cfg.URL; want != got {
+		t.Fatalf("expected URL = %q, got %q", want, got)
+	}
+	if want, got := "/etc/certs/ca.pem", cfg.CACert; want != got {
+		t.Fatalf("expected CACert = %q, got %q", want, got)
+	}
+	if want, got := "/etc/certs/client.pem", cfg.ClientCert; want != got {
+		t.Fatalf("expected ClientCert = %q, got %q", want, got)
+	}
+	if want, got := "/etc/certs/client-key.pem", cfg.ClientKey; want != got {
+		t.Fatalf("expected ClientKey = %q, got %q", want, got)
+	}
+	if cfg.TLSSkipVerify {
+		t.Fatal("expected TLSSkipVerify = false by default")
+	}
+}
+
+func TestParseTLSSkipVerify(t *testing.T) {
+	urls := "https://localhost:9200?tlsskipverify=true"
+	cfg, err := Parse(urls)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !cfg.TLSSkipVerify {
+		t.Fatal("expected TLSSkipVerify = true")
+	}
+}
+
+func TestParseTLSConfigDefaults(t *testing.T) {
+	// Without TLS params, fields should be empty/default
+	urls := "http://localhost:9200/index"
+	cfg, err := Parse(urls)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if cfg.CACert != "" {
+		t.Fatalf("expected empty CACert, got %q", cfg.CACert)
+	}
+	if cfg.ClientCert != "" {
+		t.Fatalf("expected empty ClientCert, got %q", cfg.ClientCert)
+	}
+	if cfg.ClientKey != "" {
+		t.Fatalf("expected empty ClientKey, got %q", cfg.ClientKey)
+	}
+	if cfg.TLSSkipVerify {
+		t.Fatal("expected TLSSkipVerify = false by default")
+	}
+}

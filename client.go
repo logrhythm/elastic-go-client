@@ -435,6 +435,41 @@ func DialWithConfig(ctx context.Context, cfg *config.Config) (*Client, error) {
 func configToOptions(cfg *config.Config) ([]ClientOptionFunc, error) {
 	var options []ClientOptionFunc
 	if cfg != nil {
+		// Build HTTP client with TLS and auth if configured
+		if cfg.CACert != "" || cfg.ClientCert != "" || cfg.TLSSkipVerify || (cfg.Username != "" && cfg.Password != "") {
+			// Create TLS transport
+			tlsCfg := config.TLSConfig{
+				CACertPath:     cfg.CACert,
+				ClientCertPath: cfg.ClientCert,
+				ClientKeyPath:  cfg.ClientKey,
+				SkipVerify:     cfg.TLSSkipVerify,
+			}
+
+			transport, err := config.NewHTTPTransport(tlsCfg)
+			if err != nil {
+				return nil, errors.Wrap(err, "unable to create HTTP transport")
+			}
+
+			// Wrap with basic auth if credentials provided
+			var finalTransport http.RoundTripper = transport
+			if cfg.Username != "" && cfg.Password != "" {
+				finalTransport = &config.BasicAuthTransport{
+					Username:  cfg.Username,
+					Password:  cfg.Password,
+					Transport: transport,
+				}
+			}
+
+			// Create HTTP client with configured transport
+			httpClient := &http.Client{
+				Transport: finalTransport,
+			}
+			options = append(options, SetHttpClient(httpClient))
+		} else if cfg.Username != "" || cfg.Password != "" {
+			// Fallback to request-level basic auth if no TLS config
+			options = append(options, SetBasicAuth(cfg.Username, cfg.Password))
+		}
+
 		if cfg.URL != "" {
 			options = append(options, SetURL(cfg.URL))
 		}
@@ -461,9 +496,6 @@ func configToOptions(cfg *config.Config) ([]ClientOptionFunc, error) {
 			}
 			l := log.New(f, "", 0)
 			options = append(options, SetInfoLog(l))
-		}
-		if cfg.Username != "" || cfg.Password != "" {
-			options = append(options, SetBasicAuth(cfg.Username, cfg.Password))
 		}
 		if cfg.Sniff != nil {
 			options = append(options, SetSniff(*cfg.Sniff))
